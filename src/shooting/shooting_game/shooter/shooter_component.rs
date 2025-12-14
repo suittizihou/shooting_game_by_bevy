@@ -4,7 +4,7 @@ use bevy::prelude::*;
 pub struct Shooter {
     damage: u32,
     interval: f32,
-    pub next_fire_time: f32,
+    next_fire_time: f32,
 }
 
 impl Default for Shooter {
@@ -30,6 +30,14 @@ impl Shooter {
     pub fn with_interval(mut self, interval: f32) -> Self {
         self.interval = interval;
         self
+    }
+
+    pub const fn can_fire(&self, now: f32) -> bool {
+        now >= self.next_fire_time
+    }
+
+    pub fn mark_fired(&mut self, now: f32) {
+        self.next_fire_time = now + self.interval;
     }
 
     pub const fn get_damage(&self) -> u32 {

@@ -38,7 +38,7 @@ pub fn player_shot(
     let now = time.elapsed_secs();
 
     for (transform, mut shooter) in &mut query {
-        if now < shooter.next_fire_time {
+        if shooter.can_fire(now) == false {
             continue;
         }
         commands.spawn(
@@ -48,6 +48,6 @@ pub fn player_shot(
                 &projectile_assets,
             ));
 
-        shooter.next_fire_time = now + shooter.get_interval();
+        shooter.mark_fired(now);
     }
 }
