@@ -32,7 +32,7 @@ impl Movement2d {
     }
 
     pub fn velocity(&self, delta_time: f32) -> Vec3 {
-        let velocity = self.direction.normalize_or_zero() * self.speed * delta_time;
+        let velocity = self.direction * self.speed * delta_time;
         Vec3::new(velocity.x, velocity.y, 0.0)
     }
 }
