@@ -1,0 +1,53 @@
+use bevy::prelude::*;
+
+use crate::shooting::shooting_game::{movement::movement_component::Movement2d, projectile::projectile_component::{ProjectileAssets, ProjectileBundle}, shooter::shooter_component::Shooter};
+
+#[derive(Component)]
+pub struct Player;
+
+pub fn player_move(input: Res<ButtonInput<KeyCode>>, mut query: Query<&mut Movement2d, With<Player>>) {
+    for mut player in &mut query {
+        let mut velocity = Vec2::ZERO;
+        if input.pressed(KeyCode::KeyW) || input.pressed(KeyCode::ArrowUp) {
+            velocity.y += 1.0;
+        }
+        if input.pressed(KeyCode::KeyS) || input.pressed(KeyCode::ArrowDown) {
+            velocity.y -= 1.0;
+        }
+        if input.pressed(KeyCode::KeyA) || input.pressed(KeyCode::ArrowLeft) {
+            velocity.x -= 1.0;
+        }
+        if input.pressed(KeyCode::KeyD) || input.pressed(KeyCode::ArrowRight) {
+            velocity.x += 1.0;
+        }
+        player.set_direction(velocity);
+    }
+}
+
+pub fn player_shot(
+    mut commands: Commands,
+    time: Res<Time>,
+    input: Res<ButtonInput<KeyCode>>,
+    projectile_assets: Res<ProjectileAssets>,
+    mut query: Query<(&Transform, &mut Shooter), With<Player>>
+) {
+    if !input.pressed(KeyCode::Space) {
+        return;
+    }
+
+    let now = time.elapsed_secs();
+
+    for (transform, mut shooter) in &mut query {
+        if now < shooter.next_fire_time {
+            continue;
+        }
+        commands.spawn(
+            ProjectileBundle::new(
+                transform.translation,
+                shooter.get_damage(),
+                &projectile_assets,
+            ));
+
+        shooter.next_fire_time = now + shooter.get_interval();
+    }
+}
