@@ -19,6 +19,6 @@ impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, player_spawn.in_set(StartupGameSet::Spawn));
         app.add_systems(Update, player_move.in_set(UpdateGameSet::PreUpdate));
-        app.add_systems(Update, player_shot);
+        app.add_systems(Update, player_shot.in_set(UpdateGameSet::Update));
     }
 }
