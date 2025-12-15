@@ -2,15 +2,9 @@ use bevy::prelude::*;
 
 use crate::shooting::shooting_game::{debri::debri_component::Debri, movement::movement_component::Movement2d};
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Projectile {
     damage: u32,
-}
-
-impl Default for Projectile {
-    fn default() -> Self {
-        Self { damage: u32::default() }
-    }
 }
 
 impl Projectile {    

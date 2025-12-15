@@ -1,15 +1,9 @@
 use bevy::prelude::*;
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Movement2d {
     direction: Vec2,
     speed: f32,
-}
-
-impl Default for Movement2d {
-    fn default() -> Self {
-        Self { direction: Vec2::default(), speed: f32::default() }
-    }
 }
 
 impl Movement2d {

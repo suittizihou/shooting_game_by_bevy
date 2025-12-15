@@ -1,20 +1,10 @@
 use bevy::prelude::*;
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Shooter {
     damage: u32,
     interval: f32,
     next_fire_time: f32,
-}
-
-impl Default for Shooter {
-    fn default() -> Self {
-        Self{ 
-            damage: Default::default(),
-            interval: Default::default(),
-            next_fire_time: Default::default(), 
-        }
-    }
 }
 
 impl Shooter {

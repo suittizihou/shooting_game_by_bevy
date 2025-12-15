@@ -1,16 +1,8 @@
 use bevy::prelude::*;
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Debri {
     pub destroy_time: Timer,
-}
-
-impl Default for Debri {
-    fn default() -> Self {
-        Self {
-            destroy_time: Default::default(),
-        }
-    }
 }
 
 impl Debri {
