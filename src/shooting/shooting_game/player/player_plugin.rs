@@ -1,6 +1,6 @@
-use bevy::{color::palettes::css::PURPLE, math::VectorSpace, prelude::*};
+use bevy::{color::palettes::css::PURPLE, prelude::*};
 
-use crate::shooting::{gameset::{StartupGameSet, UpdateGameSet}, shooting_game::{movement::movement_component::Movement2d, player::player_component::{Player, PlayerAssets, PlayerBundle, player_move, player_shot}, shooter::shooter_component::Shooter}};
+use crate::shooting::{gameset::{StartupGameSet, UpdateGameSet}, shooting_game::player::player_component::{PlayerAssets, PlayerBundle, player_move, player_shot}};
 
 pub struct PlayerPlugin;
 
