@@ -10,8 +10,19 @@ fn spawn_camera(mut commands: Commands) {
 
 impl Plugin for ShootingPlugin {
     fn build(&self, app: &mut App) {
-        app.configure_sets(Startup, (StartupGameSet::Initialize, StartupGameSet::PostInitialize, StartupGameSet::Spawn).chain());
-        app.configure_sets(Update, (UpdateGameSet::PreUpdate, UpdateGameSet::Update, UpdateGameSet::LateUpdate).chain());
+        app.configure_sets(Startup, 
+            (
+                StartupGameSet::Initialize,
+                StartupGameSet::PostInitialize,
+                StartupGameSet::Spawn
+            ).chain());
+            
+        app.configure_sets(Update, 
+            (
+                UpdateGameSet::PreUpdate,
+                UpdateGameSet::Update,
+                UpdateGameSet::LateUpdate
+            ).chain());
 
         app.add_plugins(MovementPlugin);
         app.add_plugins(PlayerPlugin);
