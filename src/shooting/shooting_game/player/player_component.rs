@@ -51,3 +51,37 @@ pub fn player_shot(
         shooter.mark_fired(now);
     }
 }
+
+#[derive(Resource)]
+pub struct PlayerAssets {
+    pub mesh: Handle<Mesh>,
+    pub material: Handle<ColorMaterial>,
+}
+
+#[derive(Bundle)]
+pub struct PlayerBundle {
+    pub player: Player,
+    pub transform: Transform,
+    pub movement: Movement2d,
+    pub shooter: Shooter,
+    pub mesh: Mesh2d,
+    pub material: MeshMaterial2d<ColorMaterial>,
+}
+
+impl PlayerBundle {
+    pub fn new(
+        position: Vec3,
+        move_speed: f32,
+        damage: u32,
+        assets: &PlayerAssets,
+    ) -> Self {
+        Self {
+            player: Player,
+            transform: Transform::default().with_translation(position).with_scale(Vec3::splat(30.0)),
+            movement: Movement2d::new(Vec2::ZERO, move_speed),
+            shooter: Shooter::new(damage, 0.1),
+            mesh: Mesh2d(assets.mesh.clone()),
+            material: MeshMaterial2d(assets.material.clone()),
+        }
+    }
+}
