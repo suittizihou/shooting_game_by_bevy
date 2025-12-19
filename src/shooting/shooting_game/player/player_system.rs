@@ -1,6 +1,6 @@
 use bevy::{ecs::relationship::Relationship, prelude::*};
 
-use crate::shooting::shooting_game::{movement::movement_component::Movement2d, player::player_component::Player, projectile::{projectile_bundle::ProjectileBundle, projectile_resource::ProjectileAssets}, shooter::shooter_component::Shooter};
+use crate::shooting::shooting_game::{movement::movement_component::Movement2d, player::player_component::Player, projectile::{projectile_bundle::ProjectileBundle, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter};
 
 pub fn player_move(input: Res<ButtonInput<KeyCode>>, mut query: Query<&mut Movement2d, With<Player>>) {
     for mut player in &mut query {
@@ -25,7 +25,7 @@ pub fn player_shot(
     mut commands: Commands,
     time: Res<Time>,
     input: Res<ButtonInput<KeyCode>>,
-    projectile_assets: Res<ProjectileAssets>,
+    projectile_resources: Res<ProjectileResources>,
     mut shooters: Query<(&GlobalTransform, &mut Shooter, &ChildOf)>,
     players: Query<(), With<Player>>,
 ) {
@@ -35,7 +35,7 @@ pub fn player_shot(
 
     let now = time.elapsed_secs();
 
-    for (g_transform, mut shooter, child_of) in &mut shooters {
+    for (transform, mut shooter, child_of) in &mut shooters {
         if players.get(child_of.get()).is_err() {
             continue;
         }
@@ -46,9 +46,10 @@ pub fn player_shot(
         
         commands.spawn(
             ProjectileBundle::new(
-                g_transform.translation(),
-                shooter.get_damage(),
-                &projectile_assets,
+                &shooter,
+                transform.translation(),
+                transform.up().xy(),
+                &projectile_resources,
             ));
 
         shooter.mark_fired(now);

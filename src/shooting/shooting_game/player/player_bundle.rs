@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{movement::movement_bundle::Movement2dBundle, player::{player_component::Player, player_resource::PlayerAssets}, shooter::shooter_component::ShooterBundle};
+use crate::shooting::shooting_game::{faction::faction_component::Faction, move_entity::move_entity_bundle::MoveEntityBundle, player::{player_component::Player, player_resource::PlayerResources}, shooter::shooter_component::ShooterBundle};
 
 #[derive(Bundle)]
 pub struct PlayerBundle {
@@ -49,6 +49,7 @@ impl PlayerBundle {
                         Transform::from_xyz(0.0, 0.5, 0.0),
                         damage,
                         0.1,
+                        Faction::Player,
                     )); 
             })
         .id()

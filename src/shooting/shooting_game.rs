@@ -3,4 +3,7 @@ pub mod movement;
 pub mod shooter;
 pub mod projectile;
 pub mod debri;
+pub mod enemy;
 pub mod move_entity;
+pub mod enemy_spawner;
+pub mod faction;

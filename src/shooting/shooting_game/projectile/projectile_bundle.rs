@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{debri::debri_component::Debri, move_entity::move_entity_bundle::MoveEntityBundle, projectile::{projectile_component::Projectile, projectile_resource::ProjectileResources}};
+use crate::shooting::shooting_game::{debri::debri_component::Debri, move_entity::move_entity_bundle::MoveEntityBundle, projectile::{projectile_component::Projectile, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter};
 
 #[derive(Bundle)]
 pub struct ProjectileBundle {
@@ -13,7 +13,7 @@ pub struct ProjectileBundle {
 }
 
 impl ProjectileBundle {
-    pub fn new(position: Vec3, damage: u32, move_dir: Vec2, assets: &ProjectileResources) -> Self {
+    pub fn new(shooter: &Shooter, position: Vec3, move_dir: Vec2, assets: &ProjectileResources) -> Self {
         Self {
             move_entity_bundle: MoveEntityBundle::new(
                 position,
@@ -22,7 +22,7 @@ impl ProjectileBundle {
                 500.0,
                 Some(move_dir),
             ),
-            projectile: Projectile::new(damage),
+            projectile: Projectile::new(shooter.get_damage(), shooter.get_faction()),
             mesh: Mesh2d(assets.mesh.clone()),
             material: MeshMaterial2d(assets.material.clone()),
             debri: Debri::new(1.0)

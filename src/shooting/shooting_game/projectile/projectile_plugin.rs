@@ -1,6 +1,6 @@
 use bevy::{color::palettes::css::YELLOW, prelude::*};
 
-use crate::shooting::{gameset::StartupGameSet, shooting_game::projectile::projectile_resource::ProjectileAssets};
+use crate::shooting::{gameset::StartupGameSet, shooting_game::projectile::projectile_resource::ProjectileResources};
 
 pub struct ProjectilePlugin;
 
@@ -9,7 +9,7 @@ fn setup_projectile_assets(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    commands.insert_resource(ProjectileAssets {
+    commands.insert_resource(ProjectileResources {
         mesh: meshes.add(Circle::default()),
         material: materials.add(Color::from(YELLOW)),
     });
