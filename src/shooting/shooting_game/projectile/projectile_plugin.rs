@@ -1,6 +1,6 @@
 use bevy::{color::palettes::css::YELLOW, prelude::*};
 
-use crate::shooting::{gameset::StartupGameSet, shooting_game::projectile::projectile_component::ProjectileAssets};
+use crate::shooting::{gameset::StartupGameSet, shooting_game::projectile::projectile_resource::ProjectileAssets};
 
 pub struct ProjectilePlugin;
 

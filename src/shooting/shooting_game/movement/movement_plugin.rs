@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::shooting::{gameset::UpdateGameSet, shooting_game::movement::movement_component::movement_system};
+use crate::shooting::{gameset::UpdateGameSet, shooting_game::movement::movement_system::*};
 
 pub struct MovementPlugin;
 
