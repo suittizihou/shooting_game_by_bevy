@@ -1,6 +1,6 @@
 use bevy::{ecs::relationship::Relationship, prelude::*};
 
-use crate::shooting::shooting_game::{movement::movement_component::Movement2d, player::player_component::Player, projectile::{projectile_bundle::ProjectileBundle, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter};
+use crate::shooting::shooting_game::{movement::movement_component::Movement2d, player::player_component::Player, projectile::projectile_message::ProjectileMessage, shooter::shooter_component::Shooter};
 
 pub fn player_move(input: Res<ButtonInput<KeyCode>>, mut query: Query<&mut Movement2d, With<Player>>) {
     for mut player in &mut query {
@@ -22,11 +22,10 @@ pub fn player_move(input: Res<ButtonInput<KeyCode>>, mut query: Query<&mut Movem
 }
 
 pub fn player_shot(
-    mut commands: Commands,
     time: Res<Time>,
     input: Res<ButtonInput<KeyCode>>,
-    projectile_resources: Res<ProjectileResources>,
-    mut shooters: Query<(&GlobalTransform, &mut Shooter, &ChildOf)>,
+    mut projectile_message: MessageWriter<ProjectileMessage>,
+    mut shooters: Query<(Entity, &mut Shooter, &ChildOf)>,
     players: Query<(), With<Player>>,
 ) {
     if !input.pressed(KeyCode::Space) {
@@ -35,22 +34,20 @@ pub fn player_shot(
 
     let now = time.elapsed_secs();
 
-    for (transform, mut shooter, child_of) in &mut shooters {
+    for (entity, mut shooter, child_of) in &mut shooters {
         if players.get(child_of.get()).is_err() {
             continue;
-        }
+        };
 
         if shooter.can_fire(now) == false {
             continue;
         }
         
-        commands.spawn(
-            ProjectileBundle::new(
-                &shooter,
-                transform.translation(),
-                transform.up().xy(),
-                &projectile_resources,
-            ));
+        projectile_message.write(
+            ProjectileMessage { 
+                entity,
+            },
+        );
 
         shooter.mark_fired(now);
     }
