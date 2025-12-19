@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 #[derive(Resource)]
-pub struct ProjectileAssets {
+pub struct ProjectileResources {
     pub mesh: Handle<Mesh>,
     pub material: Handle<ColorMaterial>,
 }
