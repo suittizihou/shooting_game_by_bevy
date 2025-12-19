@@ -38,3 +38,22 @@ impl Shooter {
         self.interval
     }
 }
+
+#[derive(Bundle)]
+pub struct ShooterBundle {
+    pub transform: Transform,
+    pub shooter: Shooter,
+}
+
+impl ShooterBundle {
+    pub fn new(
+        transform: Transform,
+        damage: u32,
+        interval: f32,
+    ) -> Self {
+        Self {
+            transform,
+            shooter: Shooter::new(damage, interval),
+        }
+    }
+}

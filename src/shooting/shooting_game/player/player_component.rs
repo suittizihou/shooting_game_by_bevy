@@ -1,6 +1,7 @@
-use bevy::prelude::*;
+use bevy::{ecs::relationship::Relationship, prelude::*};
+use bevy_rapier2d::prelude::Collider;
 
-use crate::shooting::shooting_game::{movement::movement_component::Movement2d, projectile::projectile_component::{ProjectileAssets, ProjectileBundle}, shooter::shooter_component::Shooter};
+use crate::shooting::shooting_game::{movement::movement_component::{Movement2d, Movement2dBundle}, projectile::projectile_component::{ProjectileAssets, ProjectileBundle}, shooter::shooter_component::{Shooter, ShooterBundle}};
 
 #[derive(Component)]
 pub struct Player;
@@ -29,7 +30,8 @@ pub fn player_shot(
     time: Res<Time>,
     input: Res<ButtonInput<KeyCode>>,
     projectile_assets: Res<ProjectileAssets>,
-    mut query: Query<(&Transform, &mut Shooter), With<Player>>
+    mut shooters: Query<(&GlobalTransform, &mut Shooter, &ChildOf)>,
+    players: Query<(), With<Player>>,
 ) {
     if !input.pressed(KeyCode::Space) {
         return;
@@ -37,13 +39,18 @@ pub fn player_shot(
 
     let now = time.elapsed_secs();
 
-    for (transform, mut shooter) in &mut query {
+    for (g_transform, mut shooter, child_of) in &mut shooters {
+        if players.get(child_of.get()).is_err() {
+            continue;
+        }
+
         if shooter.can_fire(now) == false {
             continue;
         }
+        
         commands.spawn(
             ProjectileBundle::new(
-                transform.translation,
+                g_transform.translation(),
                 shooter.get_damage(),
                 &projectile_assets,
             ));
@@ -62,26 +69,49 @@ pub struct PlayerAssets {
 pub struct PlayerBundle {
     pub player: Player,
     pub transform: Transform,
-    pub movement: Movement2d,
-    pub shooter: Shooter,
+    pub collider: Collider,
+    #[bundle()]
+    pub movement: Movement2dBundle,
     pub mesh: Mesh2d,
     pub material: MeshMaterial2d<ColorMaterial>,
 }
 
 impl PlayerBundle {
-    pub fn new(
+    fn new(
         position: Vec3,
         move_speed: f32,
-        damage: u32,
         assets: &PlayerAssets,
     ) -> Self {
         Self {
             player: Player,
             transform: Transform::default().with_translation(position).with_scale(Vec3::splat(30.0)),
-            movement: Movement2d::new(Vec2::ZERO, move_speed),
-            shooter: Shooter::new(damage, 0.1),
+            collider: Collider::ball(0.5),
+            movement: Movement2dBundle::new(Vec2::ZERO, move_speed),
             mesh: Mesh2d(assets.mesh.clone()),
             material: MeshMaterial2d(assets.material.clone()),
         }
+    }
+
+    pub fn spawn(
+        commands: &mut Commands,
+        position: Vec3,
+        move_speed: f32,
+        damage: u32,
+        assets: &PlayerAssets,
+    ) -> Entity {
+        commands.spawn(Self::new(
+            position,
+            move_speed,
+            assets,
+        ))
+        .with_children(|parent| { 
+                parent.spawn(
+                    ShooterBundle::new(
+                        Transform::from_xyz(0.0, 0.5, 0.0),
+                        damage,
+                        0.1,
+                    )); 
+            })
+        .id()
     }
 }

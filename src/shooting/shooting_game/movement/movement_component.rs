@@ -1,6 +1,8 @@
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::Velocity;
 
 #[derive(Component, Default)]
+#[require(Velocity)]
 pub struct Movement2d {
     direction: Vec2,
     speed: f32,
@@ -34,5 +36,20 @@ impl Movement2d {
 pub fn movement_system(time: Res<Time>, mut query: Query<(&mut Transform, &Movement2d), With<Movement2d>>) {
     for (mut transform, movement) in &mut query {
         transform.translation += movement.velocity(time.delta_secs());
+    }
+}
+
+#[derive(Bundle)]
+pub struct Movement2dBundle {
+    pub movement: Movement2d,
+    pub velocity: Velocity,
+}
+
+impl Movement2dBundle {
+    pub fn new(direction: Vec2, speed: f32) -> Self {
+        Self {
+            movement: Movement2d::new(direction, speed),
+            velocity: Velocity::zero(),
+        }
     }
 }

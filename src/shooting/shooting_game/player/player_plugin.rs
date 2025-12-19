@@ -21,13 +21,13 @@ fn spawn_player(
     mut commands: Commands,
     player_assets: Res<PlayerAssets>,
 ) {
-    commands.spawn(
-        PlayerBundle::new(
+    PlayerBundle::spawn(
+            &mut commands,
             Vec3::ZERO,
             200.0,
             30,
             &player_assets,
-        ));
+        );
 }
 
 impl Plugin for PlayerPlugin {

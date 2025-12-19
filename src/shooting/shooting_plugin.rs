@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 
 use crate::shooting::{gameset::{StartupGameSet, UpdateGameSet}, shooting_game::{debri::debri_plugin::DebriPlugin, movement::movement_plugin::MovementPlugin, player::player_plugin::PlayerPlugin, projectile::projectile_plugin::ProjectilePlugin}};
 
@@ -24,6 +25,10 @@ impl Plugin for ShootingPlugin {
                 UpdateGameSet::LateUpdate
             ).chain());
 
+        app.add_plugins((
+            RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
+            RapierDebugRenderPlugin::default(),
+        ));
         app.add_plugins(MovementPlugin);
         app.add_plugins(PlayerPlugin);
         app.add_plugins(ProjectilePlugin);
