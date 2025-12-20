@@ -42,16 +42,17 @@ pub fn collision_projectile_event(
         };
 
         if projectile.faction() == Faction::Enemy {
-            if players.get(entity1).is_ok() || players.get(entity2).is_ok() {
-                debri_message.write(DebriMessage { entity });
+            let Ok(_p_entity) = players.get(entity1).or(players.get(entity2)) else {
                 continue;
-            }
+            };
+            debri_message.write(DebriMessage { entity });
         }
         else {
-            if enemies.get(entity1).is_ok() || enemies.get(entity2).is_ok() {
-                debri_message.write(DebriMessage { entity });
+            let Ok(e_entity) = enemies.get(entity1).or(enemies.get(entity2)) else {
                 continue;
-            }
+            };
+            debri_message.write(DebriMessage { entity });
+            debri_message.write(DebriMessage { entity: e_entity });
         }
     }
 }
