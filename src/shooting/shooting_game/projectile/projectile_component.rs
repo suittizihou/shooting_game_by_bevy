@@ -22,4 +22,8 @@ impl Projectile {
         self.faction = faction;
         self
     }
+    
+    pub fn faction(&self) -> Faction {
+        self.faction
+    }
 }
