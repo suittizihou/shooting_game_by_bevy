@@ -12,7 +12,7 @@ pub fn spawn_enemies(
         EnemyBundle::spawn(
             &mut commands,
             Vec3::new(0.0, 400.0, 0.0),
-            50.0,
+            10000.0,
             5,
             &enemy_res,
         );

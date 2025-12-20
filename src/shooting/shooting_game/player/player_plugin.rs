@@ -24,7 +24,7 @@ fn spawn_player(
     PlayerBundle::spawn(
             &mut commands,
             Vec3::ZERO,
-            200.0,
+            10000.0,
             30,
             &player_res,
         );

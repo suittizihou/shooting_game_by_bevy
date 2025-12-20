@@ -19,13 +19,13 @@ impl ProjectileBundle {
                 position,
                 0.0,
                 10.0,
-                500.0,
+                50000.0,
                 Some(move_dir),
             ),
             projectile: Projectile::new(shooter.get_damage(), shooter.get_faction()),
             mesh: Mesh2d(assets.mesh.clone()),
             material: MeshMaterial2d(assets.material.clone()),
-            lifetime: Lifetime::new(1.0)
+            lifetime: Lifetime::new(1.0),
         }
     }
 }
