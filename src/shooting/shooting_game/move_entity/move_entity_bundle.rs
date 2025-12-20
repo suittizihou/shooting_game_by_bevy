@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_rapier2d::prelude::Collider;
+use bevy_rapier2d::prelude::{ActiveCollisionTypes, ActiveEvents, Collider, RigidBody, Sensor};
 
 use crate::shooting::shooting_game::movement::movement_bundle::Movement2dBundle;
 
@@ -7,6 +7,10 @@ use crate::shooting::shooting_game::movement::movement_bundle::Movement2dBundle;
 pub struct MoveEntityBundle {
     pub transform: Transform,
     pub collider: Collider,
+    pub active_event: ActiveEvents,
+    pub active_collision_types: ActiveCollisionTypes,
+    pub sensor: Sensor,
+    pub rigidbody: RigidBody,
     #[bundle()]
     pub movement: Movement2dBundle,
 }
@@ -24,8 +28,11 @@ impl MoveEntityBundle {
             .with_translation(position)
             .with_rotation(Quat::from_euler(EulerRot::XYZ, 0.0, 0.0, f32::to_radians(angle)))
             .with_scale(Vec3::splat(size)),
-
             collider: Collider::ball(0.5),
+            active_event: ActiveEvents::COLLISION_EVENTS,
+            active_collision_types: ActiveCollisionTypes::KINEMATIC_KINEMATIC,
+            sensor: Sensor,
+            rigidbody: RigidBody::KinematicVelocityBased,
             movement: Movement2dBundle::new(
                 move_dir.unwrap_or_default(), move_speed,
             ),
