@@ -1,25 +1,23 @@
 use bevy::prelude::*;
 
-use crate::shooting::{gameset::UpdateGameSet, shooting_game::debri::debri_component::Debri};
+use crate::shooting::shooting_game::debri::debri_message::DebriMessage;
 
 pub struct DebriPlugin;
 
 fn garbage_collection(
     mut commands: Commands,
-    time: Res<Time>,
-    mut query: Query<(Entity, &mut Debri)>
+    mut debri_message: MessageReader<DebriMessage>,
 ) {
-    for (entity, mut debri) in &mut query {
-        debri.destroy_time.tick(time.delta());
-
-        if debri.destroy_time.just_finished() {
-            commands.entity(entity).despawn();
-        }
+    for message in debri_message.read() {
+        let entity = message.entity;
+        commands.entity(entity).despawn_related::<Children>();
+        commands.entity(entity).despawn();
     }
 }
 
 impl Plugin for DebriPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, garbage_collection.in_set(UpdateGameSet::LateUpdate));
+        app.add_message::<DebriMessage>();
+        app.add_systems(Last, garbage_collection);
     }
 }

@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::shooting::{gameset::{StartupGameSet, UpdateGameSet}, shooting_game::{debri::debri_plugin::DebriPlugin, enemy::enemy_plugin::EnemyPlugin, movement::movement_plugin::MovementPlugin, player::player_plugin::PlayerPlugin, projectile::projectile_plugin::ProjectilePlugin}};
+use crate::shooting::{gameset::{StartupGameSet, UpdateGameSet}, shooting_game::{debri::debri_plugin::DebriPlugin, enemy::enemy_plugin::EnemyPlugin, lifetime::lifetime_plugin::LifetimePlugin, movement::movement_plugin::MovementPlugin, player::player_plugin::PlayerPlugin, projectile::projectile_plugin::ProjectilePlugin}};
 
 pub struct ShootingPlugin;
 
@@ -35,6 +35,7 @@ impl Plugin for ShootingPlugin {
             PlayerPlugin,
             EnemyPlugin,
             ProjectilePlugin,
+            LifetimePlugin,
             DebriPlugin,
         ));
 
