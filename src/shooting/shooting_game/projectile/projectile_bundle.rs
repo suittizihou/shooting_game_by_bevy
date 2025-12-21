@@ -1,12 +1,13 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{lifetime::lifetime_component::Lifetime, move_entity::move_entity_bundle::MoveEntityBundle, projectile::{projectile_component::Projectile, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter};
+use crate::shooting::shooting_game::{debri::debri_component::Debri, lifetime::lifetime_component::Lifetime, move_entity::move_entity_bundle::MoveEntityBundle, projectile::{projectile_component::Projectile, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter};
 
 #[derive(Bundle)]
 pub struct ProjectileBundle {
     pub projectile: Projectile,
     #[bundle()]
     pub move_entity_bundle: MoveEntityBundle,
+    pub debri: Debri,
     pub mesh: Mesh2d,
     pub material: MeshMaterial2d<ColorMaterial>,
     pub lifetime: Lifetime,
@@ -23,6 +24,7 @@ impl ProjectileBundle {
                 Some(move_dir),
             ),
             projectile: Projectile::new(shooter.get_damage(), shooter.get_faction()),
+            debri: Debri::default(),
             mesh: Mesh2d(assets.mesh.clone()),
             material: MeshMaterial2d(assets.material.clone()),
             lifetime: Lifetime::new(1.0),

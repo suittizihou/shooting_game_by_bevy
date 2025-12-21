@@ -1,12 +1,13 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{enemy::{enemy_component::Enemy, enemy_resource::EnemyResources}, faction::faction_component::Faction, hp::hp_component::Hp, move_entity::move_entity_bundle::MoveEntityBundle, shooter::shooter_component::ShooterBundle};
+use crate::shooting::shooting_game::{debri::debri_component::Debri, enemy::{enemy_component::Enemy, enemy_resource::EnemyResources}, faction::faction_component::Faction, hp::hp_component::Hp, move_entity::move_entity_bundle::MoveEntityBundle, shooter::shooter_component::ShooterBundle};
 
 #[derive(Bundle)]
 pub struct EnemyBundle {
     pub enemy: Enemy,
     pub move_entity_bundle: MoveEntityBundle,
     pub hp: Hp,
+    pub debri: Debri,
     pub mesh: Mesh2d,
     pub material: MeshMaterial2d<ColorMaterial>,
 }
@@ -28,6 +29,7 @@ impl EnemyBundle {
                     Some(Vec2::new(0.0, -1.0)),
                 ),
                 hp: Hp::default().with_hp(hp),
+                debri: Debri::default(),
                 mesh: Mesh2d(assets.mesh.clone()),
                 material: MeshMaterial2d(assets.material.clone()),
         }

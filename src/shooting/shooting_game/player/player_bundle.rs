@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{faction::faction_component::Faction, hp::hp_component::Hp, move_entity::move_entity_bundle::MoveEntityBundle, player::{player_component::Player, player_resource::PlayerResources}, shooter::shooter_component::ShooterBundle};
+use crate::shooting::shooting_game::{debri::debri_component::Debri, faction::faction_component::Faction, hp::hp_component::Hp, move_entity::move_entity_bundle::MoveEntityBundle, player::{player_component::Player, player_resource::PlayerResources}, shooter::shooter_component::ShooterBundle};
 
 #[derive(Bundle)]
 pub struct PlayerBundle {
@@ -8,6 +8,7 @@ pub struct PlayerBundle {
     #[bundle()]
     pub move_entity_bundle: MoveEntityBundle,
     pub hp: Hp,
+    pub debri: Debri,
     pub mesh: Mesh2d,
     pub material: MeshMaterial2d<ColorMaterial>,
 }
@@ -29,6 +30,7 @@ impl PlayerBundle {
                 None,
             ),
             hp: Hp::default().with_hp(hp),
+            debri: Debri::default(),
             mesh: Mesh2d(assets.mesh.clone()),
             material: MeshMaterial2d(assets.material.clone()),
         }
