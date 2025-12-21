@@ -1,7 +1,7 @@
 use bevy::{color::palettes::css::YELLOW, prelude::*};
 use bevy_rapier2d::plugin::PhysicsSet;
 
-use crate::shooting::{gameset::StartupGameSet, shooting_game::projectile::{projectile_message::ProjectileMessage, projectile_resource::ProjectileResources, projectile_system::{collision_projectile_event, spawn_projectile_from_event}}};
+use crate::shooting::{gameset::StartupGameSet, shooting_game::projectile::{projectile_message::ProjectileMessage, projectile_resource::ProjectileResources, projectile_system::{collision_to_enemy, collision_to_player, spawn_projectile_from_event}}};
 
 pub struct ProjectilePlugin;
 
@@ -25,6 +25,10 @@ impl Plugin for ProjectilePlugin {
             PostUpdate,
             spawn_projectile_from_event.after(TransformSystems::Propagate),
         );
-        app.add_systems(PostUpdate, collision_projectile_event.after(PhysicsSet::StepSimulation));
+        app.add_systems(PostUpdate, 
+            (
+                collision_to_player,
+                collision_to_enemy
+            ).after(PhysicsSet::StepSimulation));
     }
 }

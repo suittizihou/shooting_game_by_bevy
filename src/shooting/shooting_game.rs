@@ -8,3 +8,4 @@ pub mod move_entity;
 pub mod enemy_spawner;
 pub mod faction;
 pub mod lifetime;
+pub mod hit;
