@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{enemy::{enemy_bundle::EnemyBundle, enemy_resource::EnemyResources}, enemy_spawner::enemy_spawner_resource::EnemySpawnerResources};
+use crate::shooting::shooting_game::{
+    enemy::{enemy_bundle::EnemyBundle, enemy_resource::EnemyResources},
+    enemy_spawner::enemy_spawner_resource::EnemySpawnerResources,
+};
 
 pub fn spawn_enemies(
     mut commands: Commands,

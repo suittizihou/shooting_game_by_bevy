@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use crate::shooting::{gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet}, shooting_game::player::player_system::*};
+use crate::shooting::{
+    gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet},
+    shooting_game::player::player_system::*,
+};
 
 pub struct PlayerPlugin;
 

@@ -1,6 +1,13 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{debri::debri_component::Debri, enemy::{enemy_component::Enemy, enemy_resource::EnemyResources}, faction::faction_component::Faction, hp::hp_component::Hp, move_entity::move_entity_bundle::MoveEntityBundle, shooter::shooter_component::ShooterBundle};
+use crate::shooting::shooting_game::{
+    debri::debri_component::Debri,
+    enemy::{enemy_component::Enemy, enemy_resource::EnemyResources},
+    faction::faction_component::Faction,
+    hp::hp_component::Hp,
+    move_entity::move_entity_bundle::MoveEntityBundle,
+    shooter::shooter_component::ShooterBundle,
+};
 
 #[derive(Bundle)]
 pub struct EnemyBundle {
@@ -13,25 +20,20 @@ pub struct EnemyBundle {
 }
 
 impl EnemyBundle {
-    fn new(
-        position: Vec3,
-        move_speed: f32,
-        hp: u32,
-        assets: &EnemyResources,
-    ) -> Self {
-            Self {
-                enemy: Enemy,
-                move_entity_bundle: MoveEntityBundle::new(
-                    position,
-                    180.0,
-                    30.0,
-                    move_speed,
-                    Some(Vec2::new(0.0, -1.0)),
-                ),
-                hp: Hp::default().with_hp(hp),
-                debri: Debri::default(),
-                mesh: Mesh2d(assets.mesh.clone()),
-                material: MeshMaterial2d(assets.material.clone()),
+    fn new(position: Vec3, move_speed: f32, hp: u32, assets: &EnemyResources) -> Self {
+        Self {
+            enemy: Enemy,
+            move_entity_bundle: MoveEntityBundle::new(
+                position,
+                180.0,
+                30.0,
+                move_speed,
+                Some(Vec2::new(0.0, -1.0)),
+            ),
+            hp: Hp::default().with_hp(hp),
+            debri: Debri::default(),
+            mesh: Mesh2d(assets.mesh.clone()),
+            material: MeshMaterial2d(assets.material.clone()),
         }
     }
 
@@ -43,21 +45,16 @@ impl EnemyBundle {
         damage: u32,
         assets: &EnemyResources,
     ) -> Entity {
-        commands.spawn(Self::new(
-            position,
-            move_speed,
-            hp,
-            assets,
-        ))
-        .with_children(|parent| {
-            parent.spawn(
-                ShooterBundle::new(
+        commands
+            .spawn(Self::new(position, move_speed, hp, assets))
+            .with_children(|parent| {
+                parent.spawn(ShooterBundle::new(
                     Transform::from_xyz(0.0, 0.0, 0.0),
                     damage,
                     1.0,
                     Faction::Enemy,
-            ));
-        })
-        .id()
+                ));
+            })
+            .id()
     }
 }

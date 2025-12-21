@@ -12,7 +12,10 @@ pub struct Shooter {
 
 impl Shooter {
     pub fn new(damage: u32, interval: f32, faction: Faction) -> Self {
-        Self::default().with_damage(damage).with_interval(interval).with_faction(faction)
+        Self::default()
+            .with_damage(damage)
+            .with_interval(interval)
+            .with_faction(faction)
     }
 
     pub fn with_damage(mut self, damage: u32) -> Self {
@@ -58,12 +61,7 @@ pub struct ShooterBundle {
 }
 
 impl ShooterBundle {
-    pub fn new(
-        transform: Transform,
-        damage: u32,
-        interval: f32,
-        faction: Faction,
-    ) -> Self {
+    pub fn new(transform: Transform, damage: u32, interval: f32, faction: Faction) -> Self {
         Self {
             transform,
             shooter: Shooter::new(damage, interval, faction),

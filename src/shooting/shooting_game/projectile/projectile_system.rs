@@ -1,6 +1,16 @@
 use bevy::{color::palettes::css::YELLOW, prelude::*};
 
-use crate::shooting::shooting_game::{debri::debri_message::DebriMessage, faction::faction_component::Faction, hit::hit_message::{ProjectileHitEnemyMessage, ProjectileHitPlayerMessage}, projectile::{projectile_bundle::ProjectileBundle, projectile_component::Projectile, projectile_message::ProjectileMessage, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter, take_damage::take_damage_message::TakeDamageMessage};
+use crate::shooting::shooting_game::{
+    debri::debri_message::DebriMessage,
+    faction::faction_component::Faction,
+    hit::hit_message::{ProjectileHitEnemyMessage, ProjectileHitPlayerMessage},
+    projectile::{
+        projectile_bundle::ProjectileBundle, projectile_component::Projectile,
+        projectile_message::ProjectileMessage, projectile_resource::ProjectileResources,
+    },
+    shooter::shooter_component::Shooter,
+    take_damage::take_damage_message::TakeDamageMessage,
+};
 
 pub fn setup_projectile_assets(
     mut commands: Commands,
@@ -21,14 +31,12 @@ pub fn spawn_projectile_from_event(
 ) {
     for req in event.read() {
         if let Ok((transform, shooter)) = query.get(req.entity) {
-            commands.spawn(
-                ProjectileBundle::new(
-                    shooter,
-                    transform.translation(),
-                    transform.up().xy(),
-                    &projectile_resources,
-                )
-            );
+            commands.spawn(ProjectileBundle::new(
+                shooter,
+                transform.translation(),
+                transform.up().xy(),
+                &projectile_resources,
+            ));
         }
     }
 }
@@ -45,13 +53,15 @@ pub fn collision_to_player(
         };
         match projectile.faction() {
             Faction::Enemy => {
-                take_damage_message.write(TakeDamageMessage { 
+                take_damage_message.write(TakeDamageMessage {
                     entity: message.player,
-                    damage: projectile.damage() 
+                    damage: projectile.damage(),
                 });
-                debri_message.write(DebriMessage { entity: message.projectile });
-            },
-            Faction::Player => {},
+                debri_message.write(DebriMessage {
+                    entity: message.projectile,
+                });
+            }
+            Faction::Player => {}
         }
     }
 }
@@ -70,11 +80,13 @@ pub fn collision_to_enemy(
             Faction::Player => {
                 take_damage_message.write(TakeDamageMessage {
                     entity: message.enemy,
-                    damage: projectile.damage() 
+                    damage: projectile.damage(),
                 });
-                debri_message.write(DebriMessage { entity: message.projectile });
-            },
-            Faction::Enemy => {},
+                debri_message.write(DebriMessage {
+                    entity: message.projectile,
+                });
+            }
+            Faction::Enemy => {}
         }
     }
 }

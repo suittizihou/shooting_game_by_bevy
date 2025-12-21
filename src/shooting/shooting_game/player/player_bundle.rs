@@ -1,6 +1,13 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{debri::debri_component::Debri, faction::faction_component::Faction, hp::hp_component::Hp, move_entity::move_entity_bundle::MoveEntityBundle, player::{player_component::Player, player_resource::PlayerResources}, shooter::shooter_component::ShooterBundle};
+use crate::shooting::shooting_game::{
+    debri::debri_component::Debri,
+    faction::faction_component::Faction,
+    hp::hp_component::Hp,
+    move_entity::move_entity_bundle::MoveEntityBundle,
+    player::{player_component::Player, player_resource::PlayerResources},
+    shooter::shooter_component::ShooterBundle,
+};
 
 #[derive(Bundle)]
 pub struct PlayerBundle {
@@ -14,21 +21,10 @@ pub struct PlayerBundle {
 }
 
 impl PlayerBundle {
-    fn new(
-        position: Vec3,
-        move_speed: f32,
-        hp: u32,
-        assets: &PlayerResources,
-    ) -> Self {
+    fn new(position: Vec3, move_speed: f32, hp: u32, assets: &PlayerResources) -> Self {
         Self {
             player: Player,
-            move_entity_bundle: MoveEntityBundle::new(
-                position,
-                0.0,
-                30.0,
-                move_speed,
-                None,
-            ),
+            move_entity_bundle: MoveEntityBundle::new(position, 0.0, 30.0, move_speed, None),
             hp: Hp::default().with_hp(hp),
             debri: Debri::default(),
             mesh: Mesh2d(assets.mesh.clone()),
@@ -44,21 +40,16 @@ impl PlayerBundle {
         damage: u32,
         assets: &PlayerResources,
     ) -> Entity {
-        commands.spawn(Self::new(
-            position,
-            move_speed,
-            hp,
-            assets,
-        ))
-        .with_children(|parent| { 
-                parent.spawn(
-                    ShooterBundle::new(
-                        Transform::from_xyz(0.0, 0.5, 0.0),
-                        damage,
-                        0.1,
-                        Faction::Player,
-                    )); 
+        commands
+            .spawn(Self::new(position, move_speed, hp, assets))
+            .with_children(|parent| {
+                parent.spawn(ShooterBundle::new(
+                    Transform::from_xyz(0.0, 0.5, 0.0),
+                    damage,
+                    0.1,
+                    Faction::Player,
+                ));
             })
-        .id()
+            .id()
     }
 }

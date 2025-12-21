@@ -1,7 +1,12 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::shooting::shooting_game::{enemy::enemy_component::Enemy, hit::hit_message::{ProjectileHitEnemyMessage, ProjectileHitPlayerMessage}, player::player_component::Player, projectile::projectile_component::Projectile};
+use crate::shooting::shooting_game::{
+    enemy::enemy_component::Enemy,
+    hit::hit_message::{ProjectileHitEnemyMessage, ProjectileHitPlayerMessage},
+    player::player_component::Player,
+    projectile::projectile_component::Projectile,
+};
 
 #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
 enum HitKind {
@@ -19,13 +24,9 @@ struct OrderedPair<A, B> {
 impl<A: Copy, B: Ord + Copy> OrderedPair<A, B> {
     fn new(left: (A, B), right: (A, B)) -> Self {
         if left.1 <= right.1 {
+            Self { left, right }
+        } else {
             Self {
-                left,
-                right,
-            }
-        }
-        else {
-            Self{
                 left: right,
                 right: left,
             }
@@ -39,9 +40,15 @@ fn classify(
     enemies: &Query<(), With<Enemy>>,
     projectiles: &Query<(), With<Projectile>>,
 ) -> Option<HitKind> {
-    if players.get(entity).is_ok() { return Some(HitKind::Player); }
-    if enemies.get(entity).is_ok() { return Some(HitKind::Enemy); }
-    if projectiles.get(entity).is_ok() { return Some(HitKind::Projectile); }
+    if players.get(entity).is_ok() {
+        return Some(HitKind::Player);
+    }
+    if enemies.get(entity).is_ok() {
+        return Some(HitKind::Enemy);
+    }
+    if projectiles.get(entity).is_ok() {
+        return Some(HitKind::Projectile);
+    }
     None
 }
 
@@ -74,11 +81,11 @@ impl HitHandlers {
                     enemy: b,
                 });
             }
-            (HitKind::Player, HitKind::Enemy) => {},
-            (HitKind::Player, HitKind::Player) => {},
-            (HitKind::Enemy, HitKind::Enemy) => {},
-            (HitKind::Projectile, HitKind::Projectile) => {},
-            _ => {},
+            (HitKind::Player, HitKind::Enemy) => {}
+            (HitKind::Player, HitKind::Player) => {}
+            (HitKind::Enemy, HitKind::Enemy) => {}
+            (HitKind::Projectile, HitKind::Projectile) => {}
+            _ => {}
         }
     }
 }
@@ -97,8 +104,12 @@ pub fn hit_dispatcher(
             CollisionEvent::Started(a, b, _) => (*a, *b),
             _ => continue,
         };
-        let Some(ka) = classify(a, &players, &enemies, &projectiles) else { continue };
-        let Some(kb) = classify(b, &players, &enemies, &projectiles) else { continue };
+        let Some(ka) = classify(a, &players, &enemies, &projectiles) else {
+            continue;
+        };
+        let Some(kb) = classify(b, &players, &enemies, &projectiles) else {
+            continue;
+        };
         hander.handle(&mut hit_player, &mut hit_enemy, a, b, ka, kb);
     }
 }

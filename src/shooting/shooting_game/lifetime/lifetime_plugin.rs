@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 
-use crate::shooting::{gameset::UpdateGameSet, shooting_game::lifetime::lifetime_system::lifetime_check};
+use crate::shooting::{
+    gameset::UpdateGameSet, shooting_game::lifetime::lifetime_system::lifetime_check,
+};
 
 pub struct LifetimePlugin;
 

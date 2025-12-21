@@ -8,7 +8,7 @@ pub struct Projectile {
     faction: Faction,
 }
 
-impl Projectile {    
+impl Projectile {
     pub fn new(damage: u32, faction: Faction) -> Self {
         Self::default().with_damage(damage).with_faction(faction)
     }
@@ -22,11 +22,11 @@ impl Projectile {
         self.faction = faction;
         self
     }
-    
+
     pub fn faction(&self) -> Faction {
         self.faction
     }
-    
+
     pub fn damage(&self) -> u32 {
         self.damage
     }
