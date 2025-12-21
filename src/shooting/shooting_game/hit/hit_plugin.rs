@@ -11,6 +11,6 @@ impl Plugin for HitPlugin {
 
         app.add_systems(PostUpdate, (
             hit_dispatcher,
-        ).in_set(PostUpdateGameSet::Update));
+        ).in_set(PostUpdateGameSet::PhysicsUpdate));
     }
 }

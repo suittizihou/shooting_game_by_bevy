@@ -28,6 +28,6 @@ impl Plugin for ProjectilePlugin {
             (
                 collision_to_player,
                 collision_to_enemy
-            ).in_set(PostUpdateGameSet::PhysicsUpdate));
+            ).in_set(PostUpdateGameSet::Update));
     }
 }
