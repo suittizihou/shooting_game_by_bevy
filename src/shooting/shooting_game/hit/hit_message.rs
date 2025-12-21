@@ -1,13 +1,13 @@
 use bevy::prelude::*;
 
 #[derive(Message, Copy, Clone)]
-pub struct ProjectileHitPlayer {
+pub struct ProjectileHitPlayerMessage {
     pub projectile: Entity,
     pub player: Entity,
 }
 
 #[derive(Message, Copy, Clone)]
-pub struct ProjectileHitEnemy {
+pub struct ProjectileHitEnemyMessage {
     pub projectile: Entity,
     pub enemy: Entity,
 }

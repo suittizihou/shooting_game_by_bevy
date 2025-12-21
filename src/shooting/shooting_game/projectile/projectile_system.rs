@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{debri::debri_message::DebriMessage, hit::hit_message::ProjectileHitEnemy, faction::faction_component::Faction, hit::hit_message::ProjectileHitPlayer, projectile::{projectile_bundle::ProjectileBundle, projectile_component::Projectile, projectile_message::ProjectileMessage, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter};
+use crate::shooting::shooting_game::{debri::debri_message::DebriMessage, hit::hit_message::ProjectileHitEnemyMessage, faction::faction_component::Faction, hit::hit_message::ProjectileHitPlayerMessage, projectile::{projectile_bundle::ProjectileBundle, projectile_component::Projectile, projectile_message::ProjectileMessage, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter};
 
 pub fn spawn_projectile_from_event(
     mut commands: Commands,
@@ -23,7 +23,7 @@ pub fn spawn_projectile_from_event(
 }
 
 pub fn collision_to_player(
-    mut messages: MessageReader<ProjectileHitPlayer>,
+    mut messages: MessageReader<ProjectileHitPlayerMessage>,
     projectiles: Query<&Projectile>,
     mut debri_message: MessageWriter<DebriMessage>,
 ) {
@@ -41,7 +41,7 @@ pub fn collision_to_player(
 }
 
 pub fn collision_to_enemy(
-    mut messages: MessageReader<ProjectileHitEnemy>,
+    mut messages: MessageReader<ProjectileHitEnemyMessage>,
     projectiles: Query<&Projectile>,
     mut debri_message: MessageWriter<DebriMessage>,
 ) {

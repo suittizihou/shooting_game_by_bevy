@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::shooting::shooting_game::{enemy::enemy_component::Enemy, hit::hit_message::{ProjectileHitEnemy, ProjectileHitPlayer}, player::player_component::Player, projectile::projectile_component::Projectile};
+use crate::shooting::shooting_game::{enemy::enemy_component::Enemy, hit::hit_message::{ProjectileHitEnemyMessage, ProjectileHitPlayerMessage}, player::player_component::Player, projectile::projectile_component::Projectile};
 
 #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
 enum HitKind {
@@ -50,8 +50,8 @@ struct HitHandlers;
 impl HitHandlers {
     fn handle(
         &self,
-        hit_player: &mut MessageWriter<ProjectileHitPlayer>,
-        hit_enemy: &mut MessageWriter<ProjectileHitEnemy>,
+        hit_player: &mut MessageWriter<ProjectileHitPlayerMessage>,
+        hit_enemy: &mut MessageWriter<ProjectileHitEnemyMessage>,
         a: Entity,
         b: Entity,
         ka: HitKind,
@@ -63,13 +63,13 @@ impl HitHandlers {
 
         match (ka, kb) {
             (HitKind::Projectile, HitKind::Player) => {
-                hit_player.write(ProjectileHitPlayer {
+                hit_player.write(ProjectileHitPlayerMessage {
                     projectile: a,
                     player: b,
                 });
             }
             (HitKind::Projectile, HitKind::Enemy) => {
-                hit_enemy.write(ProjectileHitEnemy {
+                hit_enemy.write(ProjectileHitEnemyMessage {
                     projectile: a,
                     enemy: b,
                 });
@@ -88,8 +88,8 @@ pub fn hit_dispatcher(
     players: Query<(), With<Player>>,
     enemies: Query<(), With<Enemy>>,
     projectiles: Query<(), With<Projectile>>,
-    mut hit_player: MessageWriter<ProjectileHitPlayer>,
-    mut hit_enemy: MessageWriter<ProjectileHitEnemy>,
+    mut hit_player: MessageWriter<ProjectileHitPlayerMessage>,
+    mut hit_enemy: MessageWriter<ProjectileHitEnemyMessage>,
 ) {
     let hander = HitHandlers;
     for col in collisions.read() {
