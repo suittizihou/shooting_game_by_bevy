@@ -1,27 +1,8 @@
-use bevy::{color::palettes::css::RED, prelude::*};
+use bevy::prelude::*;
 
-use crate::shooting::{gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet}, shooting_game::{enemy::{enemy_resource::EnemyResources, enemy_system::{apply_damage_enemy, enemy_shot}}, enemy_spawner::{enemy_spawner_resource::EnemySpawnerResources, enemy_spawner_system::spawn_enemies}}};
+use crate::shooting::{gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet}, shooting_game::{enemy::enemy_system::{apply_damage_enemy, enemy_shot, startup_enemy}, enemy_spawner::enemy_spawner_system::spawn_enemies}};
 
 pub struct EnemyPlugin;
-
-fn startup_enemy(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
-) {
-    commands.insert_resource(
-           EnemyResources {
-            mesh: meshes.add(Circle::default()),
-            material: materials.add(Color::from(RED)),
-        }
-    );
-
-    commands.insert_resource(
-        EnemySpawnerResources {
-            timer: Timer::from_seconds(1.0, TimerMode::Repeating),
-        } 
-    );
-}
 
 impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {

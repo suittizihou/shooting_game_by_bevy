@@ -1,6 +1,33 @@
-use bevy::{ecs::relationship::Relationship, prelude::*};
+use bevy::{color::palettes::css::PURPLE, ecs::relationship::Relationship, prelude::*};
 
-use crate::shooting::shooting_game::{debri::debri_message::DebriMessage, hp::hp_component::Hp, movement::movement_component::Movement2d, player::player_component::Player, projectile::projectile_message::ProjectileMessage, shooter::shooter_component::Shooter, take_damage::take_damage_message::TakeDamageMessage};
+use crate::shooting::shooting_game::{debri::debri_message::DebriMessage, hp::hp_component::Hp, movement::movement_component::Movement2d, player::{player_bundle::PlayerBundle, player_component::Player, player_resource::PlayerResources}, projectile::projectile_message::ProjectileMessage, shooter::shooter_component::Shooter, take_damage::take_damage_message::TakeDamageMessage};
+
+pub fn startup_player(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
+) {
+    commands.insert_resource(
+        PlayerResources {
+            mesh: meshes.add(Circle::default()),
+            material: materials.add(Color::from(PURPLE)),
+        }
+    );
+}
+
+pub fn spawn_player(
+    mut commands: Commands,
+    player_res: Res<PlayerResources>,
+) {
+    PlayerBundle::spawn(
+            &mut commands,
+            Vec3::ZERO,
+            10000.0,
+            100,
+            30,
+            &player_res,
+        );
+}
 
 pub fn player_move(input: Res<ButtonInput<KeyCode>>, mut query: Query<&mut Movement2d, With<Player>>) {
     for mut player in &mut query {

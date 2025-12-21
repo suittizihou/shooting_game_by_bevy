@@ -1,35 +1,8 @@
-use bevy::{color::palettes::css::PURPLE, prelude::*};
+use bevy::prelude::*;
 
-use crate::shooting::{gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet}, shooting_game::player::{player_bundle::PlayerBundle, player_resource::PlayerResources, player_system::*}};
+use crate::shooting::{gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet}, shooting_game::player::player_system::*};
 
 pub struct PlayerPlugin;
-
-fn startup_player(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
-) {
-    commands.insert_resource(
-        PlayerResources {
-            mesh: meshes.add(Circle::default()),
-            material: materials.add(Color::from(PURPLE)),
-        }
-    );
-}
-
-fn spawn_player(
-    mut commands: Commands,
-    player_res: Res<PlayerResources>,
-) {
-    PlayerBundle::spawn(
-            &mut commands,
-            Vec3::ZERO,
-            10000.0,
-            100,
-            30,
-            &player_res,
-        );
-}
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {

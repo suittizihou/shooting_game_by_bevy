@@ -1,19 +1,8 @@
-use bevy::{color::palettes::css::YELLOW, prelude::*};
+use bevy::prelude::*;
 
-use crate::shooting::{gameset::{PostUpdateGameSet, StartupGameSet}, shooting_game::projectile::{projectile_message::ProjectileMessage, projectile_resource::ProjectileResources, projectile_system::{collision_to_enemy, collision_to_player, spawn_projectile_from_event}}};
+use crate::shooting::{gameset::{PostUpdateGameSet, StartupGameSet}, shooting_game::projectile::{projectile_message::ProjectileMessage, projectile_system::{collision_to_enemy, collision_to_player, setup_projectile_assets, spawn_projectile_from_event}}};
 
 pub struct ProjectilePlugin;
-
-fn setup_projectile_assets(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
-) {
-    commands.insert_resource(ProjectileResources {
-        mesh: meshes.add(Circle::default()),
-        material: materials.add(Color::from(YELLOW)),
-    });
-}
 
 impl Plugin for ProjectilePlugin {
     fn build(&self, app: &mut App) {
