@@ -31,8 +31,11 @@ pub fn collision_to_player(
         let Ok(projectile) = projectiles.get(message.projectile) else {
             continue;
         };
-        if projectile.faction() == Faction::Enemy {
-            debri_message.write(DebriMessage { entity: message.projectile });
+        match projectile.faction() {
+            Faction::Enemy => {
+                debri_message.write(DebriMessage { entity: message.projectile });
+            },
+            Faction::Player => {},
         }
     }
 }
@@ -46,8 +49,11 @@ pub fn collision_to_enemy(
         let Ok(projectile) = projectiles.get(message.projectile) else {
             continue;
         };
-        if projectile.faction() == Faction::Player {
-            debri_message.write(DebriMessage { entity: message.projectile });
+        match projectile.faction() {
+            Faction::Player => {
+                debri_message.write(DebriMessage { entity: message.projectile });
+            },
+            Faction::Enemy => {},
         }
     }
 }
