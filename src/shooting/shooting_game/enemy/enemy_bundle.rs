@@ -1,11 +1,12 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{enemy::{enemy_component::Enemy, enemy_resource::EnemyResources}, faction::faction_component::Faction, move_entity::move_entity_bundle::MoveEntityBundle, shooter::shooter_component::ShooterBundle};
+use crate::shooting::shooting_game::{enemy::{enemy_component::Enemy, enemy_resource::EnemyResources}, faction::faction_component::Faction, hp::hp_component::Hp, move_entity::move_entity_bundle::MoveEntityBundle, shooter::shooter_component::ShooterBundle};
 
 #[derive(Bundle)]
 pub struct EnemyBundle {
     pub enemy: Enemy,
     pub move_entity_bundle: MoveEntityBundle,
+    pub hp: Hp,
     pub mesh: Mesh2d,
     pub material: MeshMaterial2d<ColorMaterial>,
 }
@@ -14,6 +15,7 @@ impl EnemyBundle {
     fn new(
         position: Vec3,
         move_speed: f32,
+        hp: u32,
         assets: &EnemyResources,
     ) -> Self {
             Self {
@@ -25,6 +27,7 @@ impl EnemyBundle {
                     move_speed,
                     Some(Vec2::new(0.0, -1.0)),
                 ),
+                hp: Hp::default().with_hp(hp),
                 mesh: Mesh2d(assets.mesh.clone()),
                 material: MeshMaterial2d(assets.material.clone()),
         }
@@ -34,12 +37,14 @@ impl EnemyBundle {
         commands: &mut Commands,
         position: Vec3,
         move_speed: f32,
+        hp: u32,
         damage: u32,
         assets: &EnemyResources,
     ) -> Entity {
         commands.spawn(Self::new(
             position,
             move_speed,
+            hp,
             assets,
         ))
         .with_children(|parent| {

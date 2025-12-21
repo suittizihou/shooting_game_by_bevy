@@ -9,3 +9,4 @@ pub mod enemy_spawner;
 pub mod faction;
 pub mod lifetime;
 pub mod hit;
+pub mod hp;

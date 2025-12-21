@@ -1,12 +1,13 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{faction::faction_component::Faction, move_entity::move_entity_bundle::MoveEntityBundle, player::{player_component::Player, player_resource::PlayerResources}, shooter::shooter_component::ShooterBundle};
+use crate::shooting::shooting_game::{faction::faction_component::Faction, hp::hp_component::Hp, move_entity::move_entity_bundle::MoveEntityBundle, player::{player_component::Player, player_resource::PlayerResources}, shooter::shooter_component::ShooterBundle};
 
 #[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
     #[bundle()]
     pub move_entity_bundle: MoveEntityBundle,
+    pub hp: Hp,
     pub mesh: Mesh2d,
     pub material: MeshMaterial2d<ColorMaterial>,
 }
@@ -15,6 +16,7 @@ impl PlayerBundle {
     fn new(
         position: Vec3,
         move_speed: f32,
+        hp: u32,
         assets: &PlayerResources,
     ) -> Self {
         Self {
@@ -26,6 +28,7 @@ impl PlayerBundle {
                 move_speed,
                 None,
             ),
+            hp: Hp::default().with_hp(hp),
             mesh: Mesh2d(assets.mesh.clone()),
             material: MeshMaterial2d(assets.material.clone()),
         }
@@ -35,12 +38,14 @@ impl PlayerBundle {
         commands: &mut Commands,
         position: Vec3,
         move_speed: f32,
+        hp: u32,
         damage: u32,
         assets: &PlayerResources,
     ) -> Entity {
         commands.spawn(Self::new(
             position,
             move_speed,
+            hp,
             assets,
         ))
         .with_children(|parent| { 
