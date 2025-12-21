@@ -13,6 +13,7 @@ pub fn spawn_enemies(
             &mut commands,
             Vec3::new(0.0, 400.0, 0.0),
             10000.0,
+            50,
             5,
             &enemy_res,
         );

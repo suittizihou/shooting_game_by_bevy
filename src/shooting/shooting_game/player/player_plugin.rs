@@ -1,6 +1,6 @@
 use bevy::{color::palettes::css::PURPLE, prelude::*};
 
-use crate::shooting::{gameset::{StartupGameSet, UpdateGameSet}, shooting_game::player::{player_bundle::PlayerBundle, player_resource::PlayerResources, player_system::*}};
+use crate::shooting::{gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet}, shooting_game::player::{player_bundle::PlayerBundle, player_resource::PlayerResources, player_system::*}};
 
 pub struct PlayerPlugin;
 
@@ -25,6 +25,7 @@ fn spawn_player(
             &mut commands,
             Vec3::ZERO,
             10000.0,
+            100,
             30,
             &player_res,
         );
@@ -36,5 +37,9 @@ impl Plugin for PlayerPlugin {
         app.add_systems(Startup, spawn_player.in_set(StartupGameSet::Spawn));
         app.add_systems(Update, player_move.in_set(UpdateGameSet::PreUpdate));
         app.add_systems(Update, player_shot.in_set(UpdateGameSet::Update));
+        app.add_systems(
+            PostUpdate,
+            apply_damage_player.in_set(PostUpdateGameSet::LateUpdate),
+        );
     }
 }

@@ -13,3 +13,11 @@ pub enum UpdateGameSet {
     Update,
     LateUpdate,
 }
+
+#[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
+pub enum PostUpdateGameSet {
+    PreUpdate,
+    PhysicsUpdate,
+    Update,
+    LateUpdate,
+}

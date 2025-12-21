@@ -26,4 +26,8 @@ impl Projectile {
     pub fn faction(&self) -> Faction {
         self.faction
     }
+    
+    pub fn damage(&self) -> u32 {
+        self.damage
+    }
 }

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{debri::debri_message::DebriMessage, hit::hit_message::ProjectileHitEnemyMessage, faction::faction_component::Faction, hit::hit_message::ProjectileHitPlayerMessage, projectile::{projectile_bundle::ProjectileBundle, projectile_component::Projectile, projectile_message::ProjectileMessage, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter};
+use crate::shooting::shooting_game::{debri::debri_message::DebriMessage, faction::faction_component::Faction, hit::hit_message::{ProjectileHitEnemyMessage, ProjectileHitPlayerMessage}, projectile::{projectile_bundle::ProjectileBundle, projectile_component::Projectile, projectile_message::ProjectileMessage, projectile_resource::ProjectileResources}, shooter::shooter_component::Shooter, take_damage::take_damage_message::TakeDamageMessage};
 
 pub fn spawn_projectile_from_event(
     mut commands: Commands,
@@ -26,6 +26,7 @@ pub fn collision_to_player(
     mut messages: MessageReader<ProjectileHitPlayerMessage>,
     projectiles: Query<&Projectile>,
     mut debri_message: MessageWriter<DebriMessage>,
+    mut take_damage_message: MessageWriter<TakeDamageMessage>,
 ) {
     for message in messages.read() {
         let Ok(projectile) = projectiles.get(message.projectile) else {
@@ -33,6 +34,10 @@ pub fn collision_to_player(
         };
         match projectile.faction() {
             Faction::Enemy => {
+                take_damage_message.write(TakeDamageMessage { 
+                    entity: message.player,
+                    damage: projectile.damage() 
+                });
                 debri_message.write(DebriMessage { entity: message.projectile });
             },
             Faction::Player => {},
@@ -44,6 +49,7 @@ pub fn collision_to_enemy(
     mut messages: MessageReader<ProjectileHitEnemyMessage>,
     projectiles: Query<&Projectile>,
     mut debri_message: MessageWriter<DebriMessage>,
+    mut take_damage_message: MessageWriter<TakeDamageMessage>,
 ) {
     for message in messages.read() {
         let Ok(projectile) = projectiles.get(message.projectile) else {
@@ -51,6 +57,10 @@ pub fn collision_to_enemy(
         };
         match projectile.faction() {
             Faction::Player => {
+                take_damage_message.write(TakeDamageMessage {
+                    entity: message.enemy,
+                    damage: projectile.damage() 
+                });
                 debri_message.write(DebriMessage { entity: message.projectile });
             },
             Faction::Enemy => {},

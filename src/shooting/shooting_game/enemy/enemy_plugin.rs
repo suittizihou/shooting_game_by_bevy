@@ -1,6 +1,6 @@
 use bevy::{color::palettes::css::RED, prelude::*};
 
-use crate::shooting::{gameset::{StartupGameSet, UpdateGameSet}, shooting_game::{enemy::{enemy_resource::EnemyResources, enemy_system::enemy_shot}, enemy_spawner::{enemy_spawner_resource::EnemySpawnerResources, enemy_spawner_system::spawn_enemies}}};
+use crate::shooting::{gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet}, shooting_game::{enemy::{enemy_resource::EnemyResources, enemy_system::{apply_damage_enemy, enemy_shot}}, enemy_spawner::{enemy_spawner_resource::EnemySpawnerResources, enemy_spawner_system::spawn_enemies}}};
 
 pub struct EnemyPlugin;
 
@@ -36,6 +36,10 @@ impl Plugin for EnemyPlugin {
         app.add_systems(
             Update,
             enemy_shot.after(TransformSystems::Propagate),
+        );
+        app.add_systems(
+            PostUpdate,
+            apply_damage_enemy.in_set(PostUpdateGameSet::LateUpdate),
         );
     }
 }
