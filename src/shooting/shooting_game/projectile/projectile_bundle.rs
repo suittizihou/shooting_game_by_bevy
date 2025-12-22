@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+use crate::shooting::shooting_game::collider::ball_bundle::BallSensorBundle;
 use crate::shooting::shooting_game::{
     debri::debri_component::Debri,
     lifetime::lifetime_component::Lifetime,
@@ -14,6 +15,8 @@ pub struct ProjectileBundle {
     #[bundle()]
     pub move_entity_bundle: MoveEntityBundle,
     pub debri: Debri,
+    #[bundle()]
+    pub collider: BallSensorBundle,
     pub mesh: Mesh2d,
     pub material: MeshMaterial2d<ColorMaterial>,
     pub lifetime: Lifetime,
@@ -30,6 +33,7 @@ impl ProjectileBundle {
             move_entity_bundle: MoveEntityBundle::new(position, 0.0, 10.0, 50000.0, Some(move_dir)),
             projectile: Projectile::new(shooter.get_damage(), shooter.get_faction()),
             debri: Debri::default(),
+            collider: BallSensorBundle::new(0.5),
             mesh: Mesh2d(assets.mesh.clone()),
             material: MeshMaterial2d(assets.material.clone()),
             lifetime: Lifetime::new(1.0),

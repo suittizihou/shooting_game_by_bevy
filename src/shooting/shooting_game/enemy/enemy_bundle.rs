@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+use crate::shooting::shooting_game::collider::ball_bundle::BallSensorBundle;
 use crate::shooting::shooting_game::{
     debri::debri_component::Debri,
     enemy::{enemy_component::Enemy, enemy_resource::EnemyResources},
@@ -15,6 +16,8 @@ pub struct EnemyBundle {
     pub move_entity_bundle: MoveEntityBundle,
     pub hp: Hp,
     pub debri: Debri,
+    #[bundle()]
+    pub collider: BallSensorBundle,
     pub mesh: Mesh2d,
     pub material: MeshMaterial2d<ColorMaterial>,
 }
@@ -32,6 +35,7 @@ impl EnemyBundle {
             ),
             hp: Hp::default().with_hp(hp),
             debri: Debri::default(),
+            collider: BallSensorBundle::new(0.5),
             mesh: Mesh2d(assets.mesh.clone()),
             material: MeshMaterial2d(assets.material.clone()),
         }
