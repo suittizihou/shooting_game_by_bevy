@@ -37,14 +37,7 @@ pub fn enemy_shot(
         if enemies.get(child_of.get()).is_err() {
             continue;
         };
-
-        if shooter.can_fire(now) == false {
-            continue;
-        }
-
-        projectile_message.write(ProjectileMessage { entity });
-
-        shooter.mark_fired(now);
+        shooter.try_shot(now, entity, &mut projectile_message);
     }
 }
 

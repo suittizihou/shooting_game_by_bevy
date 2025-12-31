@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use crate::shooting::shooting_game::faction::faction_component::Faction;
+use crate::shooting::shooting_game::projectile::projectile_message::ProjectileMessage;
 
 #[derive(Component, Default)]
 pub struct Shooter {
@@ -31,6 +32,19 @@ impl Shooter {
     pub fn with_faction(mut self, faction: Faction) -> Self {
         self.faction = faction;
         self
+    }
+
+    pub fn try_shot(
+        &mut self,
+        now: f32,
+        entity: Entity,
+        message: &mut MessageWriter<ProjectileMessage>,
+    ) {
+        if self.can_fire(now) == false {
+            return;
+        }
+        message.write(ProjectileMessage { entity });
+        self.mark_fired(now);
     }
 
     pub const fn can_fire(&self, now: f32) -> bool {

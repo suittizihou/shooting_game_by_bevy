@@ -67,13 +67,7 @@ pub fn player_shot(
             continue;
         };
 
-        if shooter.can_fire(now) == false {
-            continue;
-        }
-
-        projectile_message.write(ProjectileMessage { entity });
-
-        shooter.mark_fired(now);
+        shooter.try_shot(now, entity, &mut projectile_message);
     }
 }
 
