@@ -34,7 +34,7 @@ pub fn spawn_projectile_from_event(
             commands.spawn(ProjectileBundle::new(
                 shooter,
                 transform.translation(),
-                transform.up().xy(),
+                req.direction,
                 &projectile_resources,
             ));
         }

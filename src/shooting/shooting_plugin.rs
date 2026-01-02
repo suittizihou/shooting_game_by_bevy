@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use crate::shooting::shooting_game::shooter::shooter_plugin::ShooterPlugin;
 use crate::shooting::{
     gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet},
     shooting_game::{
@@ -60,6 +61,7 @@ impl Plugin for ShootingPlugin {
             MovementPlugin,
             PlayerPlugin,
             EnemyPlugin,
+            ShooterPlugin,
             ProjectilePlugin,
             LifetimePlugin,
             DebriPlugin,

@@ -1,7 +1,6 @@
 pub mod collider;
 pub mod debri;
 pub mod enemy;
-pub mod enemy_spawner;
 pub mod faction;
 pub mod hit;
 pub mod hp;
