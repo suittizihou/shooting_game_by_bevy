@@ -1,14 +1,16 @@
-use bevy::{color::palettes::css::RED, ecs::relationship::Relationship, prelude::*};
-
+use crate::shooting::shooting_game::enemy::enemy_spawner::enemy_spawner_resource::EnemySpawnerResources;
+use crate::shooting::shooting_game::player::player_component::Player;
+use crate::shooting::shooting_game::shooter::pattern_shooter::homing_shooter::homing_shooter_message::HomingShooterMessage;
+use crate::shooting::shooting_game::shooter::shooter_component::Shooter;
+use crate::shooting::shooting_game::shooter::shooter_message::ShooterMessageCommon;
 use crate::shooting::shooting_game::{
     debri::debri_message::DebriMessage,
     enemy::{enemy_component::Enemy, enemy_resource::EnemyResources},
-    enemy_spawner::enemy_spawner_resource::EnemySpawnerResources,
     hp::hp_component::Hp,
-    projectile::projectile_message::ProjectileMessage,
-    shooter::shooter_component::Shooter,
     take_damage::take_damage_message::TakeDamageMessage,
 };
+use bevy::ecs::relationship::Relationship;
+use bevy::{color::palettes::css::RED, prelude::*};
 
 pub fn startup_enemy(
     mut commands: Commands,
@@ -26,18 +28,36 @@ pub fn startup_enemy(
 }
 
 pub fn enemy_shot(
-    time: Res<Time>,
-    mut projectile_message: MessageWriter<ProjectileMessage>,
-    mut shooters: Query<(Entity, &mut Shooter, &ChildOf)>,
-    enemies: Query<(), With<Enemy>>,
+    mut shooter_message: MessageWriter<HomingShooterMessage>,
+    shooters: Query<(Entity, &ChildOf), With<Shooter>>,
+    enemies: Query<&GlobalTransform, With<Enemy>>,
+    players: Query<(Entity, &GlobalTransform), With<Player>>,
 ) {
-    let now = time.elapsed_secs();
-
-    for (entity, mut shooter, child_of) in &mut shooters {
-        if enemies.get(child_of.get()).is_err() {
+    for (entity, child_of) in &shooters {
+        let Ok(enemy_transform) = enemies.get(child_of.get()) else {
             continue;
         };
-        shooter.try_shot(now, entity, &mut projectile_message);
+        let mut near_entity: Option<Entity> = None;
+        let mut min_distance = f32::MAX;
+        for (player_entity, player_transform) in &players {
+            let distance = player_transform
+                .translation()
+                .distance(enemy_transform.translation());
+            if min_distance >= distance {
+                min_distance = distance;
+                near_entity = Some(player_entity);
+            }
+        }
+
+        match near_entity {
+            Some(player) => {
+                shooter_message.write(HomingShooterMessage {
+                    shooter_common: ShooterMessageCommon { entity },
+                    target_entity: player,
+                });
+            }
+            None => {}
+        };
     }
 }
 

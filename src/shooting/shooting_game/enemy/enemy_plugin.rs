@@ -1,11 +1,9 @@
 use bevy::prelude::*;
 
+use crate::shooting::shooting_game::enemy::enemy_spawner::enemy_spawner_system::spawn_enemies;
 use crate::shooting::{
     gameset::{PostUpdateGameSet, StartupGameSet, UpdateGameSet},
-    shooting_game::{
-        enemy::enemy_system::{apply_damage_enemy, enemy_shot, startup_enemy},
-        enemy_spawner::enemy_spawner_system::spawn_enemies,
-    },
+    shooting_game::enemy::enemy_system::{apply_damage_enemy, enemy_shot, startup_enemy},
 };
 
 pub struct EnemyPlugin;

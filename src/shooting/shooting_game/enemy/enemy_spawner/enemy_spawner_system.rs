@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
-use crate::shooting::shooting_game::{
-    enemy::{enemy_bundle::EnemyBundle, enemy_resource::EnemyResources},
-    enemy_spawner::enemy_spawner_resource::EnemySpawnerResources,
+use crate::shooting::shooting_game::enemy::enemy_spawner::enemy_spawner_resource::EnemySpawnerResources;
+use crate::shooting::shooting_game::enemy::{
+    enemy_bundle::EnemyBundle, enemy_resource::EnemyResources,
 };
 
 pub fn spawn_enemies(
@@ -15,6 +15,7 @@ pub fn spawn_enemies(
         EnemyBundle::spawn(
             &mut commands,
             Vec3::new(0.0, 400.0, 0.0),
+            180.0,
             10000.0,
             50,
             5,

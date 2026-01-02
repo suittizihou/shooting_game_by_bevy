@@ -1,5 +1,4 @@
-use bevy::{color::palettes::css::PURPLE, ecs::relationship::Relationship, prelude::*};
-
+use crate::shooting::shooting_game::shooter::shooter_component::Shooter;
 use crate::shooting::shooting_game::{
     debri::debri_message::DebriMessage,
     hp::hp_component::Hp,
@@ -7,10 +6,12 @@ use crate::shooting::shooting_game::{
     player::{
         player_bundle::PlayerBundle, player_component::Player, player_resource::PlayerResources,
     },
-    projectile::projectile_message::ProjectileMessage,
-    shooter::shooter_component::Shooter,
     take_damage::take_damage_message::TakeDamageMessage,
 };
+use bevy::ecs::relationship::Relationship;
+use bevy::{color::palettes::css::PURPLE, prelude::*};
+use crate::shooting::shooting_game::shooter::pattern_shooter::normal_shooter::normal_shooter_message::NormalShooterMessage;
+use crate::shooting::shooting_game::shooter::shooter_message::ShooterMessageCommon;
 
 pub fn startup_player(
     mut commands: Commands,
@@ -50,24 +51,22 @@ pub fn player_move(
 }
 
 pub fn player_shot(
-    time: Res<Time>,
     input: Res<ButtonInput<KeyCode>>,
-    mut projectile_message: MessageWriter<ProjectileMessage>,
-    mut shooters: Query<(Entity, &mut Shooter, &ChildOf)>,
+    mut shooter_message: MessageWriter<NormalShooterMessage>,
+    shooters: Query<(Entity, &ChildOf), With<Shooter>>,
     players: Query<(), With<Player>>,
 ) {
     if !input.pressed(KeyCode::Space) {
         return;
     }
 
-    let now = time.elapsed_secs();
-
-    for (entity, mut shooter, child_of) in &mut shooters {
+    for (entity, child_of) in &shooters {
         if players.get(child_of.get()).is_err() {
             continue;
-        };
-
-        shooter.try_shot(now, entity, &mut projectile_message);
+        }
+        shooter_message.write(NormalShooterMessage {
+            shooter_common: ShooterMessageCommon { entity },
+        });
     }
 }
 
